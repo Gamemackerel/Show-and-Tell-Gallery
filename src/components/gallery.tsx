@@ -38,7 +38,7 @@ const Gallery: React.FC = () => {
     const loadGalleryData = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch('/gallery_data.json');
+        const response = await fetch('gallery_data.json');
         const data = await response.json();
         setGalleryData(data);
       } catch (err) {
@@ -142,15 +142,15 @@ const Gallery: React.FC = () => {
       return (
         <div className="relative group">
           <img
-            src={`/${media.location}`}
+            src={`${media.location}`}
             alt={media.name}
             loading="lazy"
             className="w-full h-64 object-cover rounded-lg cursor-pointer transition-transform duration-200 hover:scale-[1.02]"
-            onClick={() => setSelectedImage(`/${media.location}`)}
+            onClick={() => setSelectedImage(`${media.location}`)}
             onError={(e) => {
               const target = e.target as HTMLImageElement;
               target.onerror = null;
-              target.src = '/api/placeholder/400/300';
+              target.src = 'not-available.png';
             }}
           />
           <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-opacity duration-200 rounded-lg" />
@@ -167,7 +167,7 @@ const Gallery: React.FC = () => {
             className="w-full h-64 rounded-lg"
             title={media.name}
           >
-            <source src={`/${media.location}`} type={media.mime_type} />
+            <source src={`${media.location}`} type={media.mime_type} />
             Your browser does not support the video tag.
           </video>
         </div>
@@ -189,7 +189,7 @@ const Gallery: React.FC = () => {
             className="w-full"
             title={media.name}
           >
-            <source src={`/${media.location}`} type={media.mime_type} />
+            <source src={`${media.location}`} type={media.mime_type} />
             Your browser does not support the audio element.
           </audio>
         </div>
@@ -201,7 +201,7 @@ const Gallery: React.FC = () => {
       return (
         <div className="bg-gray-50 p-4 rounded-lg">
           <a
-            href={`/${media.location}`}
+            href={`${media.location}`}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-3 text-blue-600 hover:text-blue-800 transition-colors"
