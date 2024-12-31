@@ -9,7 +9,10 @@
     "react-dom": "^19.0.0",
     "react-scripts": "5.0.1"
   },
+  "homepage": "https://gamemackerel.github.io/Show-and-Tell-Gallery",
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -35,6 +38,7 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.20",
+    "gh-pages": "^6.2.0",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17"
   }
