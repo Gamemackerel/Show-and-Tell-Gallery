@@ -38,7 +38,7 @@ const Gallery: React.FC = () => {
     const loadGalleryData = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch('gallery_data.json');
+        const response = await fetch(`${process.env.PUBLIC_URL}/gallery_data.json`);
         const data = await response.json();
         setGalleryData(data);
       } catch (err) {
