@@ -10,13 +10,15 @@ from datetime import datetime
 import requests
 from pathlib import Path
 import re
+import argparse
 
 class SlackGalleryProcessor:
-    def __init__(self, data_dir, output_dir):
+    def __init__(self, data_dir, output_dir, users_json_path):
         self.data_dir = Path(data_dir)
         self.output_dir = Path(output_dir)
         self.media_dir = self.output_dir / "media"
         self.media_dir.mkdir(parents=True, exist_ok=True)
+        self.users_json_path = Path(users_json_path)
 
     def process_files(self):
         gallery_data = {"posts": []}
@@ -112,15 +114,36 @@ class SlackGalleryProcessor:
     def get_user_name(self, user_id):
         # Load user data if not already loaded
         if not hasattr(self, 'user_data'):
-            with open('users.json') as f:
-                self.user_data = json.load(f)
+            with open(self.users_json_path) as f:
+                users_list = json.load(f)
+                # Convert list to dict keyed by user id
+                self.user_data = {user['id']: user for user in users_list}
 
         # Look up user and return their real name, or user ID if not found
         if user_id in self.user_data:
-            return self.user_data[user_id]['real_name']
+            profile = self.user_data[user_id].get('profile', {})
+            return profile.get('real_name', user_id)
         return user_id
 
 if __name__ == "__main__":
-    processor = SlackGalleryProcessor("slack_export", "gallery_output")
+    parser = argparse.ArgumentParser(
+        description='Process Slack channel export into a gallery JSON file with downloaded media.'
+    )
+    parser.add_argument(
+        'channel_dir',
+        help='Path to the Slack channel export directory (containing YYYY-MM-DD.json files)'
+    )
+    parser.add_argument(
+        'users_json',
+        help='Path to the users.json file from the Slack export'
+    )
+    parser.add_argument(
+        'output_dir',
+        help='Path to the output directory where gallery_data.json and media/ will be created'
+    )
+
+    args = parser.parse_args()
+
+    processor = SlackGalleryProcessor(args.channel_dir, args.output_dir, args.users_json)
     processor.process_files()
-    print("Gallery data processed and saved to gallery_output/")
+    print(f"Gallery data processed and saved to {args.output_dir}/")
