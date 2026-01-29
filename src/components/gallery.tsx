@@ -28,11 +28,26 @@ interface GalleryData {
 const STARTING_MONTH = '2022-01';
 
 const Gallery: React.FC = () => {
-  const [currentMonth, setCurrentMonth] = useState<string>(STARTING_MONTH);
   const [galleryData, setGalleryData] = useState<GalleryData>({ posts: [] });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+  // Get initial month from URL or use default
+  const getInitialMonth = () => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('month') || STARTING_MONTH;
+  };
+
+  const [currentMonth, setCurrentMonth] = useState<string>(getInitialMonth());
+
+  // Update URL when month changes
+  const handleMonthChange = (month: string) => {
+    setCurrentMonth(month);
+    const params = new URLSearchParams(window.location.search);
+    params.set('month', month);
+    window.history.pushState({}, '', `${window.location.pathname}?${params.toString()}`);
+  };
 
   useEffect(() => {
     const loadGalleryData = async () => {
@@ -310,7 +325,7 @@ const Gallery: React.FC = () => {
       <MonthNav
         months={Object.keys(groupPostsByMonth(galleryData.posts)).sort()}
         currentMonth={currentMonth}
-        onChange={setCurrentMonth}
+        onChange={handleMonthChange}
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

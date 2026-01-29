@@ -11,7 +11,6 @@ const PasswordPrompt: React.FC<PasswordPromptProps> = ({ onAuthenticated }) => {
   const [isShaking, setIsShaking] = useState(false);
 
   // Hash stored as hex - derived from SHA-256 of the passphrase
-  // The original passphrase is a combination of "open" + "exhibit"
   const TARGET_HASH = 'd3fa1b39c2577808150b8e987ac0e34829e8bedd1d187fd8287a24fce831e26a';
 
   const hashPassword = async (input: string): Promise<string> => {
