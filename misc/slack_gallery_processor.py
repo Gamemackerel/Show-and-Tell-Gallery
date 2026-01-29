@@ -2,8 +2,6 @@
 # consolidate into a single JSON file of top level posts,
 # and download all the attached files for each
 
-# Currently the user id -> name mapping part might be broken but that's a trifle
-
 import json
 import os
 from datetime import datetime
